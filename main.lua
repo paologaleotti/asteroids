@@ -11,6 +11,7 @@ function engine.load()
 end
 
 function engine.update()
+	player:move()
 end
 
 function engine.draw()

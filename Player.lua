@@ -30,6 +30,18 @@ local function Player(spawn_x, spawn_y)
 
     local move = function(self)
         local fps = love.timer.getFPS()
+        local friction = 0.7
+        print(fps)
+
+        self.rotation = 360 / 180 * math.pi / fps
+
+        if engine.keyboard.isDown("a") then
+            self.angle = self.angle + self.rotation
+        end
+
+        if engine.keyboard.isDown("d") then
+            self.angle = self.angle - self.rotation
+        end
     end
 
     return {
@@ -40,7 +52,8 @@ local function Player(spawn_x, spawn_y)
         rotation = 0,
         thrusting = false,
         thrust = thrust,
-        draw = draw
+        draw = draw,
+        move = move
     }
 end
 
