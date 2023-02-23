@@ -14,13 +14,7 @@ local function Player(spawn_x, spawn_y)
     local SHIP_SIZE = 30
     local VIEW_ANGLE = math.rad(90)
 
-    local thrust = {
-        x = 0,
-        y = 0,
-        speed = 3,
-    }
-
-    local assert_thrusting = function(self, fps, friction)
+    local process_thrusting = function(self, fps, friction)
         if self.thrusting then
             self.thrust.x = self.thrust.x + self.thrust.speed * math.cos(self.angle) / fps
             self.thrust.y = self.thrust.y - self.thrust.speed * math.sin(self.angle) / fps
@@ -32,7 +26,7 @@ local function Player(spawn_x, spawn_y)
         end
     end
 
-    local assert_edge_teleport = function(self)
+    local process_edge_position = function(self)
         if self.x + self.radius < 0 then
             self.x = engine.graphics.getWidth() + self.radius
         elseif self.x - self.radius > engine.graphics.getWidth() then
@@ -74,8 +68,14 @@ local function Player(spawn_x, spawn_y)
             self.angle = self.angle - self.rotation
         end
 
-        assert_thrusting(self, fps, friction)
-        assert_edge_teleport(self)
+        if engine.keyboard.isDown("w") then
+            player.thrusting = true
+        else
+            player.thrusting = false
+        end
+
+        process_thrusting(self, fps, friction)
+        process_edge_position(self)
 
         self.x = self.x + self.thrust.x
         self.y = self.y + self.thrust.y
@@ -88,7 +88,11 @@ local function Player(spawn_x, spawn_y)
         angle = VIEW_ANGLE,
         rotation = 0,
         thrusting = false,
-        thrust = thrust,
+        thrust = {
+            x = 0,
+            y = 0,
+            speed = 3,
+        },
         thruster = Thruster(),
         draw = draw,
         move = move
