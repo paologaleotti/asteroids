@@ -1,4 +1,5 @@
 local engine = require("love")
+local Thruster = require("objects.Thruster")
 
 local function calculate_player_vertices(x, y, angle, radius)
     return x + ((4 / 3) * radius) * math.cos(angle),
@@ -16,11 +17,16 @@ local function Player(spawn_x, spawn_y)
     local thrust = {
         x = 0,
         y = 0,
-        speed = 3
+        speed = 3,
     }
 
     local draw = function(self)
         local opacity = 1
+
+        if self.thrusting then
+            self.thruster:draw(self.x, self.y, self.angle, self.radius)
+        end
+
         engine.graphics.setColor(1, 1, 1, opacity)
         engine.graphics.polygon(
             "line",
@@ -64,6 +70,7 @@ local function Player(spawn_x, spawn_y)
         rotation = 0,
         thrusting = false,
         thrust = thrust,
+        thruster = Thruster(),
         draw = draw,
         move = move
     }

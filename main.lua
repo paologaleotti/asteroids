@@ -1,5 +1,5 @@
 local engine = require("love")
-local Player = require("Player")
+local Player = require("objects.Player")
 
 
 
