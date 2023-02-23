@@ -12,6 +12,16 @@ function engine.load()
 	_G.game = Game()
 end
 
+function engine.keypressed(key)
+	if key == "escape" then
+		if game.state.running then
+			game:set_state("paused")
+		elseif game.state.paused then
+			game:set_state("running")
+		end
+	end
+end
+
 function engine.update()
 	if game.state.running then
 		player:move()

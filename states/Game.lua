@@ -1,5 +1,5 @@
 function Game()
-    local change_state = function(self, state)
+    local set_state = function(self, state)
         self.state.menu = state == "menu"
         self.state.paused = state == "paused"
         self.state.running = state == "running"
@@ -13,7 +13,7 @@ function Game()
             running = true,
             ended = false
         },
-        change_state = change_state
+        set_state = set_state
     }
 end
 
