@@ -20,6 +20,32 @@ local function Player(spawn_x, spawn_y)
         speed = 3,
     }
 
+    local assert_thrusting = function(self, fps, friction)
+        if self.thrusting then
+            self.thrust.x = self.thrust.x + self.thrust.speed * math.cos(self.angle) / fps
+            self.thrust.y = self.thrust.y - self.thrust.speed * math.sin(self.angle) / fps
+        else
+            if self.thrust.x ~= 0 or self.thrust.y ~= 0 then
+                self.thrust.x = self.thrust.x - friction * self.thrust.x / fps
+                self.thrust.y = self.thrust.y - friction * self.thrust.y / fps
+            end
+        end
+    end
+
+    local assert_edge_teleport = function(self)
+        if self.x + self.radius < 0 then
+            self.x = engine.graphics.getWidth() + self.radius
+        elseif self.x - self.radius > engine.graphics.getWidth() then
+            self.x = 0 - self.radius
+        end
+
+        if self.y + self.radius < 0 then
+            self.y = engine.graphics.getHeight() + self.radius
+        elseif self.y - self.radius > engine.graphics.getHeight() then
+            self.y = 0 - self.radius
+        end
+    end
+
     local draw = function(self)
         local opacity = 1
 
@@ -48,15 +74,8 @@ local function Player(spawn_x, spawn_y)
             self.angle = self.angle - self.rotation
         end
 
-        if self.thrusting then
-            self.thrust.x = self.thrust.x + self.thrust.speed * math.cos(self.angle) / fps
-            self.thrust.y = self.thrust.y - self.thrust.speed * math.sin(self.angle) / fps
-        else
-            if self.thrust.x ~= 0 or self.thrust.y ~= 0 then
-                self.thrust.x = self.thrust.x - friction * self.thrust.x / fps
-                self.thrust.y = self.thrust.y - friction * self.thrust.y / fps
-            end
-        end
+        assert_thrusting(self, fps, friction)
+        assert_edge_teleport(self)
 
         self.x = self.x + self.thrust.x
         self.y = self.y + self.thrust.y
