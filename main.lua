@@ -10,6 +10,18 @@ function engine.load()
 	player = Player(center_x, center_y)
 end
 
+function engine.keypressed(key)
+	if key == "w" then
+		player.thrusting = true
+	end
+end
+
+function engine.keyreleased(key)
+	if key == "w" then
+		player.thrusting = false
+	end
+end
+
 function engine.update()
 	player:move()
 end
