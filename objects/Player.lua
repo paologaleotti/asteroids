@@ -68,11 +68,7 @@ local function Player(spawn_x, spawn_y)
             self.angle = self.angle - self.rotation
         end
 
-        if engine.keyboard.isDown("w") then
-            player.thrusting = true
-        else
-            player.thrusting = false
-        end
+        player.thrusting = engine.keyboard.isDown("w")
 
         process_thrusting(self, fps, friction)
         process_edge_position(self)
