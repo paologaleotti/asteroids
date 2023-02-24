@@ -2,6 +2,7 @@ local engine = require("love")
 
 local Player = require("objects.Player")
 local Game = require("states.Game")
+local Overlay = require("ui.Overlay")
 
 
 function engine.load()
@@ -10,6 +11,7 @@ function engine.load()
 
 	_G.player = Player(center_x, center_y)
 	_G.game = Game()
+	_G.paused_overlay = Overlay("Paused")
 end
 
 function engine.keypressed(key)
@@ -29,5 +31,8 @@ function engine.update()
 end
 
 function engine.draw()
+	if game.state.paused then
+		paused_overlay:draw()
+	end
 	player:draw()
 end
