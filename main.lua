@@ -4,6 +4,8 @@ local Player = require("objects.Player")
 local Game = require("states.Game")
 local Overlay = require("ui.Overlay")
 
+math.randomseed(os.time())
+
 
 function engine.load()
 	local center_x, center_y = engine.graphics.getWidth() / 2, engine.graphics.getHeight() / 2
