@@ -25,8 +25,7 @@ function Asteroid(x, y, size, level)
     end
 
     local draw = function(self)
-        local points = {
-        }
+        local points = {}
 
         for i = 1, self.vertices do
             local angle = self.angle + i * math.pi * 2 / self.vertices

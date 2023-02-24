@@ -55,7 +55,7 @@ local function Player(spawn_x, spawn_y)
     end
 
     local move = function(self)
-        local fps = love.timer.getFPS() == 0 and 1 or love.timer.getFPS()
+        local fps = love.timer.getFPS() == 0 and 60 or love.timer.getFPS()
         local friction = 0.7
 
         self.rotation = 360 / 180 * math.pi / fps
