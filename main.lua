@@ -6,7 +6,6 @@ local Overlay = require("ui.Overlay")
 
 math.randomseed(os.time())
 
-
 function engine.load()
 	local center_x, center_y = engine.graphics.getWidth() / 2, engine.graphics.getHeight() / 2
 	engine.mouse.setVisible(false)
@@ -14,6 +13,8 @@ function engine.load()
 	_G.player = Player(center_x, center_y)
 	_G.game = Game()
 	_G.paused_overlay = Overlay("Paused")
+
+	game:start_new_game(player)
 end
 
 function engine.keypressed(key)
@@ -36,5 +37,10 @@ function engine.draw()
 	if game.state.paused then
 		paused_overlay:draw()
 	end
+
 	player:draw()
+
+	for _, asteroid in pairs(game.asteroids) do
+		asteroid:draw()
+	end
 end
