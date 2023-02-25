@@ -3,7 +3,7 @@ local engine = require("love")
 function Asteroid(x, y, size, level)
     local MAX_VERTICES = 12
     local INDENTATION = 0.4
-    local SPEED = math.random(50) + (level * 2)
+    local SPEED = math.random(50) + (level * 2) + 15
     local DIRECTION = math.random() < 0.5 and 1 or -1
 
     local vertices = math.floor(math.random(MAX_VERTICES + 1) + MAX_VERTICES / 2)
