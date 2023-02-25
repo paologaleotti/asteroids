@@ -79,6 +79,10 @@ local function Player(spawn_x, spawn_y)
 
         self.x = self.x + self.thrust.x
         self.y = self.y + self.thrust.y
+
+        for _, laser in pairs(self.lasers) do
+            laser:move(dt)
+        end
     end
 
     local shoot = function(self)
