@@ -27,9 +27,13 @@ function engine.keypressed(key)
 	end
 end
 
-function engine.update()
+function engine.update(dt)
 	if game.state.running then
-		player:move()
+		player:move(dt)
+
+		for _, asteroid in pairs(game.asteroids) do
+			asteroid:move(dt)
+		end
 	end
 end
 

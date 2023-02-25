@@ -1,7 +1,7 @@
 local engine = require("love")
 
 function Asteroid(x, y, size, level)
-    local MAX_VERTICES = 10
+    local MAX_VERTICES = 12
     local INDENTATION = 0.4
     local SPEED = math.random(50) + (level * 2)
     local DIRECTION = math.random() < 0.5 and 1 or -1
@@ -37,6 +37,11 @@ function Asteroid(x, y, size, level)
         engine.graphics.polygon("line", points)
     end
 
+    local move = function(self, dt)
+        self.x = self.x + self.x_velocity * dt
+        self.y = self.y + self.y_velocity * dt
+    end
+
     return {
         x = x,
         y = y,
@@ -46,7 +51,8 @@ function Asteroid(x, y, size, level)
         offset = offset,
         angle = math.rad(math.random(math.pi)),
         radius = math.ceil(size / 2),
-        draw = draw
+        draw = draw,
+        move = move
     }
 end
 
