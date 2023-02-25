@@ -1,5 +1,6 @@
 local engine = require("love")
 local Thruster = require("objects.Thruster")
+local Laser = require("objects.Laser")
 
 local function calculate_player_vertices(x, y, angle, radius)
     return x + ((4 / 3) * radius) * math.cos(angle),
@@ -52,6 +53,10 @@ local function Player(spawn_x, spawn_y)
             "line",
             calculate_player_vertices(self.x, self.y, self.angle, self.radius)
         )
+
+        for _, laser in pairs(self.lasers) do
+            laser:draw()
+        end
     end
 
     local move = function(self, dt)
@@ -76,6 +81,12 @@ local function Player(spawn_x, spawn_y)
         self.y = self.y + self.thrust.y
     end
 
+    local shoot = function(self)
+        if engine.keyboard.isDown("space") then
+            table.insert(self.lasers, Laser(self.x, self.y, self.angle))
+        end
+    end
+
     return {
         x = spawn_x,
         y = spawn_y,
@@ -89,8 +100,10 @@ local function Player(spawn_x, spawn_y)
             speed = 3,
         },
         thruster = Thruster(),
+        lasers = {},
         draw = draw,
-        move = move
+        move = move,
+        shoot = shoot
     }
 end
 

@@ -30,6 +30,7 @@ end
 function engine.update(dt)
 	if game.state.running then
 		player:move(dt)
+		player:shoot()
 
 		for _, asteroid in pairs(game.asteroids) do
 			asteroid:move(dt)
