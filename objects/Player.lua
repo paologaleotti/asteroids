@@ -14,14 +14,14 @@ local function Player(spawn_x, spawn_y)
     local SHIP_SIZE = 30
     local VIEW_ANGLE = math.rad(90)
 
-    local process_thrusting = function(self, fps, friction)
+    local process_thrusting = function(self, dt, friction)
         if self.thrusting then
-            self.thrust.x = self.thrust.x + self.thrust.speed * math.cos(self.angle) / fps
-            self.thrust.y = self.thrust.y - self.thrust.speed * math.sin(self.angle) / fps
+            self.thrust.x = self.thrust.x + self.thrust.speed * math.cos(self.angle) * dt
+            self.thrust.y = self.thrust.y - self.thrust.speed * math.sin(self.angle) * dt
         else
             if self.thrust.x ~= 0 or self.thrust.y ~= 0 then
-                self.thrust.x = self.thrust.x - friction * self.thrust.x / fps
-                self.thrust.y = self.thrust.y - friction * self.thrust.y / fps
+                self.thrust.x = self.thrust.x - friction * self.thrust.x * dt
+                self.thrust.y = self.thrust.y - friction * self.thrust.y * dt
             end
         end
     end
@@ -54,11 +54,10 @@ local function Player(spawn_x, spawn_y)
         )
     end
 
-    local move = function(self)
-        local fps = love.timer.getFPS() == 0 and 60 or love.timer.getFPS()
+    local move = function(self, dt)
         local friction = 0.7
 
-        self.rotation = 360 / 180 * math.pi / fps
+        self.rotation = 360 / 180 * math.pi * dt
 
         if engine.keyboard.isDown("a") then
             self.angle = self.angle + self.rotation
@@ -70,7 +69,7 @@ local function Player(spawn_x, spawn_y)
 
         player.thrusting = engine.keyboard.isDown("w")
 
-        process_thrusting(self, fps, friction)
+        process_thrusting(self, dt, friction)
         process_edge_position(self)
 
         self.x = self.x + self.thrust.x
