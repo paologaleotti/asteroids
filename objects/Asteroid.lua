@@ -1,11 +1,13 @@
 local engine = require("love")
 local helper = require("common.helper")
+local globals = require("common.globals")
 
 function Asteroid(x, y, size, level)
     local MAX_VERTICES = 12
     local INDENTATION = 0.4
     local SPEED = math.random(50) + (level * 2) + 15
     local DIRECTION = math.random() < 0.5 and 1 or -1
+    local MIN_ASTEROID_SIZE = math.ceil(globals.INITIAL_ASTEROID_SIZE / 8)
 
     local vertices =
         math.floor(math.random(MAX_VERTICES + 1) + MAX_VERTICES / 2)
@@ -48,6 +50,19 @@ function Asteroid(x, y, size, level)
         helper.process_edge_position(self)
     end
 
+    local destroy = function(self, asteroids_table, index)
+        if self.radius > MIN_ASTEROID_SIZE then
+            for _ = 1, globals.BROKEN_ASTEROID_PIECES do
+                table.insert(
+                    asteroids_table,
+                    Asteroid(self.x, self.y, self.radius, level)
+                )
+            end
+        end
+
+        table.remove(asteroids_table, index)
+    end
+
     return {
         x = x,
         y = y,
@@ -59,7 +74,8 @@ function Asteroid(x, y, size, level)
         radius = math.ceil(size / 2),
         check_collision = check_collision,
         draw = draw,
-        move = move
+        move = move,
+        destroy = destroy
     }
 end
 

@@ -12,7 +12,7 @@ function Game()
 
     local start_new_game = function(self, player)
         self:set_state("running")
-        table.insert(asteroids, Asteroid(100, 100, 100, self.level))
+        table.insert(asteroids, Asteroid(300, 300, 100, self.level))
     end
 
     return {

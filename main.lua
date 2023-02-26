@@ -34,16 +34,21 @@ function engine.keypressed(key)
 	end
 end
 
+local function process_lasers_collision(dt, asteroid, ast_index)
+	for _, laser in pairs(player.lasers) do
+		if asteroid:check_collision(laser) then
+			laser:explode(dt)
+			asteroid:destroy(game.asteroids, ast_index)
+		end
+	end
+end
+
 function engine.update(dt)
 	if game.state.running then
 		player:move(dt)
 
-		for _, asteroid in pairs(game.asteroids) do
-			for _, laser in pairs(player.lasers) do
-				if asteroid:check_collision(laser) then
-					laser:explode(dt)
-				end
-			end
+		for ast_index, asteroid in pairs(game.asteroids) do
+			process_lasers_collision(dt, asteroid, ast_index)
 			asteroid:move(dt)
 		end
 	end
