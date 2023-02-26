@@ -14,6 +14,8 @@ end
 local function Player(spawn_x, spawn_y)
     local SHIP_SIZE = 30
     local VIEW_ANGLE = math.rad(90)
+    local LASER_RANGE = 0.6
+    local MAX_LASERS = 10
 
     local process_thrusting = function(self, dt, friction)
         if self.thrusting then
@@ -61,6 +63,7 @@ local function Player(spawn_x, spawn_y)
 
     local move = function(self, dt)
         local friction = 0.7
+        local screen_width = engine.graphics.getWidth()
 
         self.rotation = 360 / 180 * math.pi * dt
 
@@ -80,15 +83,20 @@ local function Player(spawn_x, spawn_y)
         self.x = self.x + self.thrust.x
         self.y = self.y + self.thrust.y
 
-        for _, laser in pairs(self.lasers) do
+        for index, laser in pairs(self.lasers) do
             laser:move(dt)
+            if laser.distance > LASER_RANGE * screen_width then
+                self:destroy_laser(index)
+            end
         end
     end
 
     local shoot = function(self)
-        if engine.keyboard.isDown("space") then
-            table.insert(self.lasers, Laser(self.x, self.y, self.angle))
-        end
+        table.insert(self.lasers, Laser(self.x, self.y, self.angle))
+    end
+
+    local destroy_laser = function(self, index)
+        table.remove(self.lasers, index)
     end
 
     return {
@@ -107,7 +115,8 @@ local function Player(spawn_x, spawn_y)
         lasers = {},
         draw = draw,
         move = move,
-        shoot = shoot
+        shoot = shoot,
+        destroy_laser = destroy_laser
     }
 end
 

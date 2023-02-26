@@ -25,12 +25,15 @@ function engine.keypressed(key)
 			game:set_state("running")
 		end
 	end
+
+	if key == "space" then
+		player:shoot()
+	end
 end
 
 function engine.update(dt)
 	if game.state.running then
 		player:move(dt)
-		player:shoot()
 
 		for _, asteroid in pairs(game.asteroids) do
 			asteroid:move(dt)
