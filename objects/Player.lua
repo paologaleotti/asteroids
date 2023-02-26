@@ -15,6 +15,7 @@ end
 
 local function Player(spawn_x, spawn_y)
     local SHIP_SIZE = 30
+    local EXPLODE_DURATION = 3
     local VIEW_ANGLE = math.rad(90)
     local LASER_RANGE = 0.6
     local MAX_LASERS = 10
@@ -31,25 +32,38 @@ local function Player(spawn_x, spawn_y)
         end
     end
 
+    local explode = function(self, dt)
+        self.explode_time = math.ceil(EXPLODE_DURATION / dt)
+    end
+
     local draw = function(self)
-        local opacity = 1
+        if self.exploding then
+            engine.graphics.setColor(1, 0, 0)
+            engine.graphics.circle("fill", self.x, self.y, self.radius * 1.5)
 
-        if self.thrusting then
-            self.thruster:draw(self.x, self.y, self.angle, self.radius)
-        end
+            engine.graphics.setColor(1, 158 / 255, 0)
+            engine.graphics.circle("fill", self.x, self.y, self.radius)
+        else
+            if self.thrusting then
+                self.thruster:draw(self.x, self.y, self.angle, self.radius)
+            end
 
-        engine.graphics.setColor(1, 1, 1, opacity)
-        engine.graphics.polygon(
-            "line",
-            calculate_player_vertices(self.x, self.y, self.angle, self.radius)
-        )
+            engine.graphics.setColor(1, 1, 1)
+            engine.graphics.polygon(
+                "line",
+                calculate_player_vertices(self.x, self.y, self.angle, self.radius)
+            )
 
-        for _, laser in pairs(self.lasers) do
-            laser:draw()
+            for _, laser in pairs(self.lasers) do
+                laser:draw()
+            end
         end
     end
 
     local move = function(self, dt)
+        self.exploding = self.explode_time > 0
+        if self.exploding then return end
+
         local friction = 0.7
         local screen_width = engine.graphics.getWidth()
 
@@ -108,10 +122,13 @@ local function Player(spawn_x, spawn_y)
         },
         thruster = Thruster(),
         lasers = {},
+        explode_time = 0,
+        exploding = false,
         draw = draw,
         move = move,
         shoot = shoot,
-        destroy_laser = destroy_laser
+        destroy_laser = destroy_laser,
+        explode = explode
     }
 end
 

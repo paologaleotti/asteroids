@@ -47,7 +47,16 @@ function engine.update(dt)
 	if game.state.running then
 		player:move(dt)
 
+		if player.exploding then
+			player.explode_time = player.explode_time - 1
+		end
+
 		for ast_index, asteroid in pairs(game.asteroids) do
+			if asteroid:check_collision(player) then
+				player:explode(dt)
+				asteroid:destroy(game.asteroids, ast_index)
+			end
+
 			process_lasers_collision(dt, asteroid, ast_index)
 			asteroid:move(dt)
 		end
