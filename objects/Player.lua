@@ -92,6 +92,7 @@ local function Player(spawn_x, spawn_y)
     end
 
     local shoot = function(self)
+        if #self.lasers >= MAX_LASERS then return end
         table.insert(self.lasers, Laser(self.x, self.y, self.angle))
     end
 
