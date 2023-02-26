@@ -7,7 +7,8 @@ function Asteroid(x, y, size, level)
     local SPEED = math.random(50) + (level * 2) + 15
     local DIRECTION = math.random() < 0.5 and 1 or -1
 
-    local vertices = math.floor(math.random(MAX_VERTICES + 1) + MAX_VERTICES / 2)
+    local vertices =
+        math.floor(math.random(MAX_VERTICES + 1) + MAX_VERTICES / 2)
     local offset = {}
 
     for i = 1, vertices + 1 do
@@ -19,10 +20,12 @@ function Asteroid(x, y, size, level)
     end
 
     local insert_polygon_point = function(self, points_table, coord, angle, index)
-        table.insert(
-            points_table,
-            coord + self.radius * self.offset[index + 1] * angle
-        )
+        table.insert(points_table, coord + self.radius * self.offset[index + 1] * angle)
+    end
+
+    local check_collision = function(self, object)
+        return helper.calculate_distance(object.x, object.y, self.x, self.y) <
+            self.radius
     end
 
     local draw = function(self)
@@ -54,6 +57,7 @@ function Asteroid(x, y, size, level)
         offset = offset,
         angle = math.rad(math.random(math.pi)),
         radius = math.ceil(size / 2),
+        check_collision = check_collision,
         draw = draw,
         move = move
     }

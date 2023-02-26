@@ -1,7 +1,8 @@
 local engine = require("love")
+local helper = require("common.helper")
+
 local Thruster = require("objects.Thruster")
 local Laser = require("objects.Laser")
-local helper = require("common.helper")
 
 local function calculate_player_vertices(x, y, angle, radius)
     return x + ((4 / 3) * radius) * math.cos(angle),
@@ -71,8 +72,14 @@ local function Player(spawn_x, spawn_y)
         self.y = self.y + self.thrust.y
 
         for index, laser in pairs(self.lasers) do
-            laser:move(dt)
-            if laser.distance > LASER_RANGE * screen_width then
+            if (laser.distance > LASER_RANGE * screen_width) and
+                (laser.explosion == 0) then
+                self:destroy_laser(index)
+            end
+
+            if laser.explosion == 0 then
+                laser:move(dt)
+            elseif laser.explosion == 2 then
                 self:destroy_laser(index)
             end
         end
