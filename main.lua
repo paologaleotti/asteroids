@@ -1,4 +1,5 @@
 local engine = require("love")
+local helper = require("common.helper")
 
 local Player = require("objects.Player")
 local Game = require("states.Game")
@@ -7,7 +8,9 @@ local Overlay = require("ui.Overlay")
 math.randomseed(os.time())
 
 function engine.load()
-	local center_x, center_y = engine.graphics.getWidth() / 2, engine.graphics.getHeight() / 2
+	local center_x = helper.screen_width / 2
+	local center_y = helper.screen_height / 2
+
 	engine.mouse.setVisible(false)
 
 	_G.player = Player(center_x, center_y)

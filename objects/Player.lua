@@ -1,6 +1,7 @@
 local engine = require("love")
 local Thruster = require("objects.Thruster")
 local Laser = require("objects.Laser")
+local helper = require("common.helper")
 
 local function calculate_player_vertices(x, y, angle, radius)
     return x + ((4 / 3) * radius) * math.cos(angle),
@@ -26,20 +27,6 @@ local function Player(spawn_x, spawn_y)
                 self.thrust.x = self.thrust.x - friction * self.thrust.x * dt
                 self.thrust.y = self.thrust.y - friction * self.thrust.y * dt
             end
-        end
-    end
-
-    local process_edge_position = function(self)
-        if self.x + self.radius < 0 then
-            self.x = engine.graphics.getWidth() + self.radius
-        elseif self.x - self.radius > engine.graphics.getWidth() then
-            self.x = 0 - self.radius
-        end
-
-        if self.y + self.radius < 0 then
-            self.y = engine.graphics.getHeight() + self.radius
-        elseif self.y - self.radius > engine.graphics.getHeight() then
-            self.y = 0 - self.radius
         end
     end
 
@@ -78,7 +65,7 @@ local function Player(spawn_x, spawn_y)
         player.thrusting = engine.keyboard.isDown("w")
 
         process_thrusting(self, dt, friction)
-        process_edge_position(self)
+        helper.process_edge_position(self)
 
         self.x = self.x + self.thrust.x
         self.y = self.y + self.thrust.y

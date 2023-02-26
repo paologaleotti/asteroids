@@ -1,4 +1,5 @@
 local engine = require("love")
+local helper = require("common.helper")
 
 function Asteroid(x, y, size, level)
     local MAX_VERTICES = 12
@@ -24,20 +25,6 @@ function Asteroid(x, y, size, level)
         )
     end
 
-    local process_edge_position = function(self)
-        if self.x + self.radius < 0 then
-            self.x = engine.graphics.getWidth() + self.radius
-        elseif self.x - self.radius > engine.graphics.getWidth() then
-            self.x = 0 - self.radius
-        end
-
-        if self.y + self.radius < 0 then
-            self.y = engine.graphics.getHeight() + self.radius
-        elseif self.y - self.radius > engine.graphics.getHeight() then
-            self.y = 0 - self.radius
-        end
-    end
-
     local draw = function(self)
         local points = {}
 
@@ -55,7 +42,7 @@ function Asteroid(x, y, size, level)
         self.x = self.x + self.x_velocity * dt
         self.y = self.y + self.y_velocity * dt
 
-        process_edge_position(self)
+        helper.process_edge_position(self)
     end
 
     return {

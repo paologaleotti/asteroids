@@ -1,22 +1,9 @@
 local engine = require("love")
+local helper = require("common.helper")
 
 local function Laser(x, y, angle)
     local SHOOT_SPEED = 500
     local BULLET_SIZE = 3
-
-    local process_edge_position = function(self)
-        if self.x < 0 then
-            self.x = engine.graphics.getWidth()
-        elseif self.x > engine.graphics.getWidth() then
-            self.x = 0
-        end
-
-        if self.y < 0 then
-            self.y = engine.graphics.getHeight()
-        elseif self.y > engine.graphics.getHeight() then
-            self.y = 0
-        end
-    end
 
     local draw = function(self)
         engine.graphics.setColor(1, 1, 1)
@@ -33,7 +20,7 @@ local function Laser(x, y, angle)
         self.distance = self.distance + math.sqrt(
                 (x_velocity ^ 2) + (y_velocity ^ 2)
             )
-        process_edge_position(self)
+        helper.process_edge_position(self)
     end
 
 

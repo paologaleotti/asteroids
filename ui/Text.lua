@@ -1,8 +1,9 @@
 local engine = require("love")
+local helper = require("common.helper")
 
 function Text(text, x, y, font_size, wrap_width, align, opacity)
     font_size = font_size or "p"
-    wrap_width = wrap_width or engine.graphics.getWidth()
+    wrap_width = wrap_width or helper.screen_width
     align = align or "left"
     opacity = opacity or 1
 

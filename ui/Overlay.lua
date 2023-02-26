@@ -1,14 +1,15 @@
 local engine = require("love")
 local Text = require("ui.Text")
+local helper = require("common.helper")
 
 local function Overlay(text_value)
     local draw = function(self)
         Text(
             self.text_value,
             0,
-            engine.graphics.getHeight() * 0.4,
+            helper.screen_height * 0.4,
             "h1",
-            engine.graphics.getWidth(),
+            helper.screen_width,
             "center",
             1
         ):draw()
