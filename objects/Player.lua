@@ -13,9 +13,9 @@ local function calculate_player_vertices(x, y, angle, radius)
         y + radius * (2 / 3 * math.sin(angle) + math.cos(angle))
 end
 
-local function Player(spawn_x, spawn_y)
+local function Player(spawn_x, spawn_y, initial_lives)
     local SHIP_SIZE = 30
-    local EXPLODE_DURATION = 3
+    local EXPLODE_DURATION = 1.5
     local VIEW_ANGLE = math.rad(90)
     local LASER_RANGE = 0.6
     local MAX_LASERS = 10
@@ -33,6 +33,8 @@ local function Player(spawn_x, spawn_y)
     end
 
     local explode = function(self, dt)
+        self.thrust.x, self.thrust.y = 0, 0
+        self.lives = self.lives - 1
         self.explode_time = math.ceil(EXPLODE_DURATION / dt)
     end
 
@@ -111,6 +113,7 @@ local function Player(spawn_x, spawn_y)
     return {
         x = spawn_x,
         y = spawn_y,
+        lives = initial_lives or 3,
         radius = SHIP_SIZE / 2,
         angle = VIEW_ANGLE,
         rotation = 0,

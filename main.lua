@@ -1,8 +1,9 @@
-local engine = require("love")
-local helper = require("common.helper")
+local engine  = require("love")
+local helper  = require("common.helper")
 
-local Player = require("objects.Player")
-local Game = require("states.Game")
+local Hud     = require("ui.Hud")
+local Player  = require("objects.Player")
+local Game    = require("states.Game")
 local Overlay = require("ui.Overlay")
 
 math.randomseed(os.time())
@@ -16,6 +17,7 @@ function engine.load()
 	_G.player = Player(center_x, center_y)
 	_G.game = Game()
 	_G.paused_overlay = Overlay("Paused")
+	_G.hud = Hud(player, game)
 
 	game:start_new_game(player)
 end
@@ -52,7 +54,8 @@ function engine.update(dt)
 		end
 
 		for ast_index, asteroid in pairs(game.asteroids) do
-			if asteroid:check_collision(player) then
+			if asteroid:check_collision(player)
+				and not player.exploding then
 				player:explode(dt)
 				asteroid:destroy(game.asteroids, ast_index)
 			end
@@ -60,6 +63,11 @@ function engine.update(dt)
 			process_lasers_collision(dt, asteroid, ast_index)
 			asteroid:move(dt)
 		end
+	end
+
+	if player.lives < 0 then
+		game:set_state("ended")
+		return
 	end
 end
 
@@ -69,6 +77,7 @@ function engine.draw()
 	end
 
 	player:draw()
+	hud:draw()
 
 	for _, asteroid in pairs(game.asteroids) do
 		asteroid:draw()

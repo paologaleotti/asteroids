@@ -1,4 +1,3 @@
-local engine = require("love")
 local Text = require("ui.Text")
 local helper = require("common.helper")
 
