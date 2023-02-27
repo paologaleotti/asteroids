@@ -17,9 +17,9 @@ function Game()
 
     return {
         state = {
-            menu = false,
+            menu = true,
             paused = false,
-            running = true,
+            running = false,
             ended = false
         },
         level = 1,

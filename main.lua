@@ -1,9 +1,10 @@
-local engine  = require("love")
-local helper  = require("common.helper")
+local engine = require("love")
+local helper = require("common.helper")
 
-local Hud     = require("ui.Hud")
-local Player  = require("objects.Player")
-local Game    = require("states.Game")
+local Menu = require("states.Menu")
+local Hud = require("ui.Hud")
+local Player = require("objects.Player")
+local Game = require("states.Game")
 local Overlay = require("ui.Overlay")
 
 math.randomseed(os.time())
@@ -18,8 +19,9 @@ function engine.load()
 	_G.game = Game()
 	_G.paused_overlay = Overlay("Paused")
 	_G.hud = Hud(player, game)
+	_G.menu = Menu(game, player)
 
-	game:start_new_game(player)
+	--game:start_new_game(player)
 end
 
 function engine.keypressed(key)
@@ -76,10 +78,14 @@ function engine.draw()
 		paused_overlay:draw()
 	end
 
-	player:draw()
-	hud:draw()
+	if game.state.running then
+		player:draw()
+		hud:draw()
 
-	for _, asteroid in pairs(game.asteroids) do
-		asteroid:draw()
+		for _, asteroid in pairs(game.asteroids) do
+			asteroid:draw()
+		end
+	elseif game.state.menu then
+		menu:draw()
 	end
 end
