@@ -10,6 +10,10 @@ function Game()
         self.state.endend = state == "ended"
     end
 
+    local increase_score = function(self, modifier)
+        self.score = math.ceil(self.score + 10 * self.level / 2 * modifier / 2)
+    end
+
     local start_new_game = function(self, player)
         self:set_state("running")
         table.insert(asteroids, Asteroid(300, 300, 100, self.level))
@@ -23,8 +27,10 @@ function Game()
             ended = false
         },
         level = 1,
+        score = 0,
         asteroids = asteroids,
         set_state = set_state,
+        increase_score = increase_score,
         start_new_game = start_new_game
     }
 end
